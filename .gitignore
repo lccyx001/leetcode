@@ -1,0 +1,21 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+.vscode/
+*.py[cod]
+*$py.class
+*.dSYM/
+venv3/
+node_modules
+dist
+.eslintrc.js
+# C extensions
+*.so
+*.zip
+*.idea
+*.sql
+*.log
+pid
+vue.config.js
+local_profile
+*.yaml
+*.out
