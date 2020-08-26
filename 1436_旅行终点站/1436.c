@@ -28,8 +28,40 @@ cityAi != cityBi
 链接：https://leetcode-cn.com/problems/destination-city
 著作权归领扣网络所有。商业转载请联系官方授权，非商业转载请注明出处。 */
 #include <stdio.h>
+#include <string.h>
+#include <stdlib.h>
 
 char *destCity(char ***paths, int pathsSize, int *pathsColSize)
 {
-    
+    char **result = NULL;
+    for (int i = 0; i < pathsSize; i++)
+    {
+        int has_next = 0;
+        for (int j = 0; j < pathsSize; j++)
+        {
+            if (i == j)
+                continue;
+            if (strcmp(paths[i][0], paths[j][-1]) == 0)
+            {
+                has_next = 1;
+                break;
+            }
+        }
+        if (has_next == 0)
+        {
+            result = paths[i][1];
+            break;
+        }
+    }
+    return result;
+}
+
+int main()
+{
+    char *a[3][2] = {{"London", "New York"},
+                     {"New York", "Lima"},
+                     {"Lima", "Sao Paulo"}};
+    int c = 2;
+    char *b = destCity(a, 3, &c);
+    printf("%s", b);
 }
