@@ -22,16 +22,20 @@ n == grid[i].length
 来源：力扣（LeetCode）
 链接：https://leetcode-cn.com/problems/count-negative-numbers-in-a-sorted-matrix
 著作权归领扣网络所有。商业转载请联系官方授权，非商业转载请注明出处。 */
+#include <string.h>
 
 int countNegatives(int **grid, int gridSize, int *gridColSize)
 {
     int result = 0;
-
-    for (int i = 0; i < gridColSize; i++)
+    for (int i = 0; i < gridSize; i++)
     {
-        for (int j = 0; j < gridSize; j++)
-            if (grid[i][j] < 0)
-                result++;
+        int j = 0;
+        while (j < *gridColSize && grid[i][j] >= 0)
+        {
+            j++;
+        }
+        result += *gridColSize - j;
+        gridColSize++;
     }
     return result;
 }
