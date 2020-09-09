@@ -29,3 +29,9 @@ gcc -O -g -fsanitize=address 696.c
 ```.c
 struct TreeNode *root = (struct TreeNode *)malloc(sizeof(struct TreeNode));
 ```
+
+## c 字符操作
+
+## c 多维数组
+
+## c 指针
