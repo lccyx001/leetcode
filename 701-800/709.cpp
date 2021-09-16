@@ -11,15 +11,13 @@
 来源：力扣（LeetCode）
 链接：https://leetcode-cn.com/problems/to-lower-case
 著作权归领扣网络所有。商业转载请联系官方授权，非商业转载请注明出处。 */
-#include <stdio.h>
+#include <string>
+using namespace std;
 
-char *toLowerCase(char *str){
-    
-    
-};
-
-int main()
+string toLowerCase(string s)
 {
-    char a = 'A';
-    printf("%d", a);
+    for (auto &si : s)
+        si = tolower(si);
+
+    return s;
 }

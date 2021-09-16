@@ -40,6 +40,9 @@ transform(strA.begin(), strA.end(), strA.begin(), ::toupper);
 // char to int
 s - '0'
 
+// int to string
+to_string(val);
+
 // 单个字符判断空
 for (auto &si : s)
 {

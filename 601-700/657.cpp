@@ -13,47 +13,20 @@
 来源：力扣（LeetCode）
 链接：https://leetcode-cn.com/problems/robot-return-to-origin
 著作权归领扣网络所有。商业转载请联系官方授权，非商业转载请注明出处。 */
-#include <stdlib.h>
-#include <stdbool.h>
-#include <stdio.h>
-
-bool judgeCircle(char *moves)
+#include <string>
+using namespace std;
+bool judgeCircle(string moves)
 {
-    bool result = false;
     int x = 0, y = 0;
-    int r = 0, l = 0, u = 0, p = 0;
-
-    char *t = moves;
-    while (*t != '\0')
+    for (char &s : moves)
     {
-        if (*t == 'R')
-        {
-            x++;
-            r++;
-        }
-        else if (*t == 'L')
-        {
-            x--;
-            l++;
-        }
-        else if (*t == 'U')
-        {
-            y++;
-            u++;
-        }
-        else if (*t == 'D')
-        {
-            y--;
-            p++;
-        }
-        t++;
+        if(s=='R')x++;
+        if(s=='L')x--;
+        if(s=='U')y++;
+        if(s=='D')y--;
     }
-
-    printf("all count,%d, %d,%d,%d\n", r, l, u, p);
-    if (x == 0 && y == 0)
-        result = true;
-
-    return result;
+    return x==0&&y==0;
+    
 }
 
 int main()
