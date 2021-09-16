@@ -49,6 +49,33 @@ for (auto &si : s)
     if (si != ' ')
         buf += si;
 }
+
+// string array
+// 1.使用pointer
+const char *colour[4] = { "Blue", "Red",
+                             "Orange", "Yellow" };
+for (int i = 0; i < 4; i++)
+    std::cout << colour[i] << "\n";
+
+// 2.使用2维数组
+char colour[4][10] = { "Blue", "Red", "Orange",
+                        "Yellow" };
+for (int i = 0; i < 4; i++)
+    std::cout << colour[i] << "\n";
+
+// 3.使用string类
+std::string colour[4] = { "Blue", "Red",
+                              "Orange", "Yellow" };
+for (int i = 0; i < 4; i++)
+    std::cout << colour[i] << "\n";
+
+// 4.vector
+std::vector<std::string> colour {"Blue", "Red", "Orange"};
+
+colour.push_back("Yellow");
+
+for (int i = 0; i < colour.size(); i++)
+    std::cout << colour[i] << "\n";
 ```
 
 | 功能       | append() | +=    | push_back() |
