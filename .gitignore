@@ -12,7 +12,7 @@ dist
 *.so
 *.zip
 *.idea
-*.sql
+# *.sql
 *.log
 pid
 vue.config.js

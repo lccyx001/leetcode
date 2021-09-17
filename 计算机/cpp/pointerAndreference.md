@@ -14,3 +14,30 @@
 - 如果C++项目中大量使用了NULL，为保持统一，用NULL吧
 - C/C++混合开发，用NULL
   
+## const reference
+
+考虑下面三段代码
+
+```cpp
+string concatenate (string a, string b)
+{
+  return a+b;
+}
+```
+
+```cpp
+string concatenate (string& a, string& b)
+{
+  return a+b;
+}
+```
+
+```cpp
+string concatenate (const string& a, const string& b)
+{
+  return a+b;
+}
+```
+
+第一段代码运行时，会拷贝a,b的值然后进行计算，第二段不会进行拷贝操作，效率会高一点，第三段代码在第二段的基础上避免了a，b被修改的风险.
+const reference 的左右就是第三段和第二段的总和,即避免值拷贝的低效率，避免引用值被修改的风险
