@@ -17,8 +17,6 @@ char &rp=*p;
 - reference 可能会比pointer效率更高，因为不用检测有效性
 - reference 总是指向最初被赋值的对象，pointer可以被重新赋值
 
-
-
 ## NULL 与 nullptr
 
 - NULL是宏定义，nullptr是关键字

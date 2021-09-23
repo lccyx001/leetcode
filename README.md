@@ -3,6 +3,8 @@
 这是一个leetcode 刷题记录的项目，同时会记录刷题过程中对编程语言，算法等知识的总结。刷题频率随个人空闲时间变化。使用的开发语言随不同时间工作业务需要可能是
 __c__,__c++__,__java__,__python__
 
+## [比赛如何修炼](./总结/practice.md)
+
 ## 刷题过程中的积累
 
 ### [c语言](./总结/c.md)
@@ -15,24 +17,11 @@ __c__,__c++__,__java__,__python__
 
 ### [字符串](./总结/string.md)
 
-## 动态规划题集
+### [动态规划题集](./总结/dp.md)
 
 [https://www.nowcoder.com/practice/f9c6f980eeec43ef85be20755ddbeaf4?tpId=37&tags=&title=&diffculty=0&judgeStatus=0&rp=1&tab=answerKey] 背包问题
 
 [https://leetcode-cn.com/problems/lian-xu-zi-shu-zu-de-zui-da-he-lcof/]连续子数组最大和
-
-## 知识点
-
-- 暴力解法
-- DP
-- DFS
-- WFS
-- 狄杰斯特拉算法
-- 二叉树
-- 组合数学
-- 逆元
-- 位运算
-- 二分法
 
 ## dp类型
 
@@ -43,6 +32,8 @@ __c__,__c++__,__java__,__python__
 - 01背包问题
 - 最长回文子串
 
+## 贪心
+
 ## 面试问题
 
 索引
@@ -52,3 +43,7 @@ __c__,__c++__,__java__,__python__
 内存管理
 线程安全
 redis
+
+## [Cpp 学习路线](https://www.nowcoder.com/discuss/595901)
+
+## [Cpp项目](https://www.nowcoder.com/discuss/596700)
