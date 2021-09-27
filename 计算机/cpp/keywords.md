@@ -32,3 +32,277 @@ void func2(const ClassName& cn)
 // 修饰自定义类型的返回值
 // 修饰类成员函数
 ```
+
+## static
+
+```cpp
+// 修饰普通变量
+static int a = 1;
+
+// 修饰函数
+static void func(){;}
+
+```
+
+## this
+
+- this 指针是一个隐含于每一个非静态成员函数中的特殊指针。它指向调用该成员函数的那个对象。
+- 当对一个对象调用成员函数时，编译程序先将对象的地址赋给 this 指针，然后调用成员函数，每次成员函数存取数据成员时，都隐含使用 this 指针。
+当一个成员函数被调用时，自动向它传递一个隐含的参数，该参数是一个指向这个成员函数所在的对象的指针。
+
+- this 指针被隐含地声明为: ClassName *const this，这意味着不能给 this 指针赋值；在 ClassName 类的 const 成员函数中，this 指针的类型为：const ClassName* const，这说明不能对 this 指针所指向的这种对象是不可修改的（即不能对这种对象的数据成员进行赋值操作）；
+- this 并不是一个常规变量，而是个右值，所以不能取得 this 的地址（不能 &this）。
+- 在以下场景中，经常需要显式引用 this 指针：
+为实现对象的链式引用；
+为避免对同一对象进行赋值操作；
+在实现一些数据结构时，如 list。
+
+## 左值 右值
+
+左值是指表达式结束后依然存在的 持久化对象 ，右值是指表达式结束时就不再存在的 临时对象 。 所有的具名变量或者对象都是左值，而右值不具名。 很难得到左值和右值的真正定义，但是有一个可以区分左值和右值的便捷方法： 看能不能对表达式取地址，如果能，则为左值，否则为右值 。
+
+## inline
+
+- 相当于把内联函数里面的内容写在调用内联函数处；
+- 相当于不用执行进入函数的步骤，直接执行函数体；
+- 相当于宏，却比宏多了类型检查，真正具有函数特性；
+- 编译器一般不内联包含循环、递归、switch 等复杂操作的内联函数；
+- 在类声明中定义的函数，除了虚函数的其他函数都会自动隐式地当成内联函数。
+
+```cpp
+// 声明1（加 inline，建议使用）
+inline int functionName(int first, int secend,...);
+
+// 声明2（不加 inline）
+int functionName(int first, int secend,...);
+
+// 定义
+inline int functionName(int first, int secend,...) {/****/};
+
+// 类内定义，隐式内联
+class A {
+    int doA() { return 0; }         // 隐式内联
+}
+
+// 类外定义，需要显式内联
+class A {
+    int doA();
+}
+inline int A::doA() { return 0; }   // 需要显式内联
+```
+
+### 编译器对 inline 函数的处理步骤
+
+- 将 inline 函数体复制到 inline 函数调用点处；
+- 为所用 inline 函数中的局部变量分配内存空间；
+- 将 inline 函数的的输入参数和返回值映射到调用方法的局部变量空间中；
+- 如果 inline 函数有多个返回点，将其转变为 inline 函数代码块末尾的分支（使用 GOTO）。
+
+### 优缺点
+
+#### 优点
+
+- 内联函数同宏函数一样将在被调用处进行代码展开，省去了参数压栈、栈帧开辟与回收，结果返回等，从而提高程序运行速度。
+- 内联函数相比宏函数来说，在代码展开时，会做安全检查或自动类型转换（同普通函数），而宏定义则不会。
+- 在类中声明同时定义的成员函数，自动转化为内联函数，因此内联函数可以访问类的成员变量，宏定义则不能。
+- 内联函数在运行时可调试，而宏定义不可以。
+
+#### 缺点
+
+- 代码膨胀。内联是以代码膨胀（复制）为代价，消除函数调用带来的开销。如果执行函数体内代码的时间，相比于函数调用的开销较大，那么效率的收获会很少。另一方面，每一处内联函数的调用都要复制代码，将使程序的总代码量增大，消耗更多的内存空间。
+- inline 函数无法随着函数库升级而升级。inline函数的改变需要重新编译，不像 non-inline 可以直接链接。
+是否内联，程序员不可控。内联函数只是对编译器的建议，是否对函数内联，决定权在于编译器。
+
+## 虚函数可以内联么
+
+- 虚函数可以是内联函数，内联是可以修饰虚函数的，但是当虚函数表现多态性的时候不能内联。
+- 内联是在编译器建议编译器内联，而虚函数的多态性在运行期，编译器无法知道运行期调用哪个代码，因此虚函数表现为多态性时（运行期）不可以内联。
+- inline virtual 唯一可以内联的时候是：编译器知道所调用的对象是哪个类（如 Base::who()），这只有在编译器具有实际对象而不是对象的指针或引用时才会发生。
+
+## voltile
+
+```cpp
+volatile int i = 10; 
+```
+
+- volatile 关键字是一种类型修饰符，用它声明的类型变量表示可以被某些编译器未知的因素（操作系统、硬件、其它线程等）更改。所以使用 volatile 告诉编译器不应对这样的对象进行优化。
+- volatile 关键字声明的变量，每次访问时都必须从内存中取出值（没有被 volatile 修饰的变量，可能由于编译器的优化，从 CPU 寄存器中取值）
+- const 可以是 volatile （如只读的状态寄存器）
+- 指针可以是 volatile
+  
+### 使用场景(TODO)
+
+## assert()
+
+断言，是宏，而非函数。assert 宏的原型定义在 <assert.h>（C）、<cassert>（C++）中，其作用是如果它的条件返回错误，则终止程序执行。可以通过定义 NDEBUG 来关闭 assert，但是需要在源代码的开头，include <assert.h> 之前。
+
+```cpp
+#define NDEBUG          // 加上这行，则 assert 不可用
+#include <assert.h>
+
+assert( p != NULL );    // assert 不可用
+```
+
+## sizeof()
+
+sizeof 对数组，得到整个数组所占空间大小。
+sizeof 对指针，得到指针本身所占空间大小。
+
+## #pragma pack(n)
+
+设定结构体、联合以及类成员变量以 n 字节方式对齐
+
+```cpp
+#pragma pack(push)  // 保存对齐状态
+#pragma pack(4)     // 设定为 4 字节对齐
+
+struct test
+{
+    char m1;
+    double m4;
+    int m3;
+};
+
+#pragma pack(pop)   // 恢复对齐状态
+```
+
+## 位域
+
+```cpp
+Bit mode: 2; 
+```
+
+类可以将其（非静态）数据成员定义为位域（bit-field），在一个位域中含有一定数量的二进制位。当一个程序需要向其他程序或硬件设备传递二进制数据时，通常会用到位域。
+
+位域在内存中的布局是与机器有关的
+位域的类型必须是整型或枚举类型，带符号类型中的位域的行为将因具体实现而定
+取地址运算符（&）不能作用于位域，任何指针都无法指向类的位域
+
+## extern "C"
+
+- 被 extern 限定的函数或变量是 extern 类型的
+- 被 extern "C" 修饰的变量和函数是按照 C 语言方式编译和链接的
+
+extern "C" 的作用是让 C++ 编译器将 extern "C" 声明的代码当作 C 语言代码处理，可以避免 C++ 因符号修饰导致代码不能和C语言库中的符号进行链接的问题。
+
+```cpp
+#ifdef __cplusplus
+extern "C" {
+#endif
+
+void *memset(void *, int, size_t);
+
+#ifdef __cplusplus
+}
+#endif
+```
+
+## struct 和 typedef struct
+
+```cpp
+//c
+typedef struct Student {
+    int age; 
+} S;
+
+struct Student { 
+    int age; 
+};
+
+typedef struct Student S;
+```
+
+此时 S 等价于 struct Student，但两个标识符名称空间不相同。另外还可以定义与 struct Student 不冲突的 void Student() {}。
+
+### cpp中
+
+由于编译器定位符号的规则（搜索规则）改变，导致不同于C语言。
+
+一、如果在类标识符空间定义了 struct Student {...};，使用 Student me; 时，编译器将搜索全局标识符表，Student 未找到，则在类标识符内搜索。
+即表现为可以使用 Student 也可以使用 struct Student，如下：
+
+```cpp
+struct Student { 
+    int age; 
+};
+
+void f( Student me );       // 正确，"struct" 关键字可省略
+```
+
+二、若定义了与 Student 同名函数之后，则 Student 只代表函数，不代表结构体，如下：
+
+```cpp
+typedef struct Student { 
+    int age; 
+} S;
+
+void Student() {}           // 正确，定义后 "Student" 只代表此函数
+
+//void S() {}               // 错误，符号 "S" 已经被定义为一个 "struct Student" 的别名
+
+int main() {
+    Student(); 
+    struct Student me;      // 或者 "S me";
+    return 0;
+}
+```
+
+## CPP struct 和 class 的区别
+
+struct 更适合看成是一个数据结构的实现体，class 更适合看成是一个对象的实现体。
+
+最本质的一个区别就是默认的访问控制:
+
+- 默认的继承访问权限。struct 是 public 的，class 是 private 的。
+- struct 作为数据结构的实现体，它默认的数据访问控制是 public 的，而 class 作为对象的实现体，它默认的成员变量访问控制是 private 的。
+
+## union
+
+联合（union）是一种节省空间的特殊的类，一个 union 可以有多个数据成员，但是在任意时刻只有一个数据成员可以有值。当某个成员被赋值后其他成员变为未定义状态。联合有如下特点：
+
+- 默认访问控制符为 public
+- 可以含有构造函数、析构函数
+- 不能含有引用类型的成员
+- 不能继承自其他类，不能作为基类
+- 不能含有虚函数
+- 匿名 union 在定义所在作用域可直接访问 union 成员
+- 匿名 union 不能包含 protected 成员或 private 成员
+- 全局匿名联合必须是静态（static）的
+  
+```cpp
+#include<iostream>
+
+union UnionTest {
+    UnionTest() : i(10) {};
+    int i;
+    double d;
+};
+
+static union {
+    int i;
+    double d;
+};
+
+int main() {
+    UnionTest u;
+
+    union {
+        int i;
+        double d;
+    };
+
+    std::cout << u.i << std::endl;  // 输出 UnionTest 联合的 10
+
+    ::i = 20;
+    std::cout << ::i << std::endl;  // 输出全局静态匿名联合的 20
+
+    i = 30;
+    std::cout << i << std::endl;    // 输出局部匿名联合的 30
+
+    return 0;
+}
+```
+
+## C 实现 C++ 类
+
+## explicit（显式）关键字

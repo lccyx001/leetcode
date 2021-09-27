@@ -19,4 +19,11 @@ for (auto it = m.cbegin(); it != m.cend(); ++it) {
         std::cout << "{" << (*it).first << ": " << (*it).second << "}\n";
     }
 
+// vector 
+// find
+bool f = *find(vec.begin(),vec.end().target)==target;
+
+// count
+
+
 ```
