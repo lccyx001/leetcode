@@ -305,4 +305,365 @@ int main() {
 
 ## C 实现 C++ 类
 
+## 转换函数
+
+转换函数指的是类型之间的转换，比如把自定义的类类型转换成内建类型（比如double），后者向相反的方向转。
+
+- 语法规则
+  
+```cpp
+operator Type ()
+{
+    Type ret;
+    
+    // ...
+    
+    return ret;
+}
+```
+
+例子
+
+```cpp
+#include<iostream>
+using namespace std;
+class Fraction
+{
+public:
+    Fraction(int num,int den=1):m_numerator(num),m_denominator(den)
+    {
+        cout << "构造函数  被调用了哦！！！" << endl;
+    }
+    ~Fraction(){ cout << "析构  函数被调用了哦！！！" << endl; }
+    operator double()const {
+        return (double)(m_numerator / m_denominator);
+    }
+private:
+    double m_numerator;
+    double m_denominator;
+};
+
+int main()
+{
+    Fraction f(1, 5);
+    cout << f.operator double() << endl; //转换函数
+    double d = 4 + f;
+    cout <<"d: "<< d << endl;
+    system("pause");
+    return 0;
+}
+```
+
 ## explicit（显式）关键字
+
+- explicit 修饰构造函数时，可以防止隐式转换和复制初始化
+- explicit 修饰转换函数时，可以防止隐式转换，但 按语境转换 除外
+
+```cpp
+struct A
+{
+    A(int) { }
+    operator bool() const { return true; }
+};
+
+struct B
+{
+ explicit B(int) {}
+ explicit operator bool() const { return true; }
+};
+
+void doA(A a) {}
+
+void doB(B b) {}
+
+int main()
+{
+ A a1(1);  // OK：直接初始化
+ A a2 = 1;  // OK：复制初始化
+ A a3{ 1 };  // OK：直接列表初始化
+ A a4 = { 1 };  // OK：复制列表初始化
+ A a5 = (A)1;  // OK：允许 static_cast 的显式转换 
+ doA(1);   // OK：允许从 int 到 A 的隐式转换
+ if (a1);  // OK：使用转换函数 A::operator bool() 的从 A 到 bool 的隐式转换
+ bool a6（a1）;  // OK：使用转换函数 A::operator bool() 的从 A 到 bool 的隐式转换
+ bool a7 = a1;  // OK：使用转换函数 A::operator bool() 的从 A 到 bool 的隐式转换
+ bool a8 = static_cast<bool>(a1);  // OK ：static_cast 进行直接初始化
+
+ B b1(1);  // OK：直接初始化
+ B b2 = 1;  // 错误：被 explicit 修饰构造函数的对象不可以复制初始化
+ B b3{ 1 };  // OK：直接列表初始化
+ B b4 = { 1 };  // 错误：被 explicit 修饰构造函数的对象不可以复制列表初始化
+ B b5 = (B)1;  // OK：允许 static_cast 的显式转换
+ doB(1);   // 错误：被 explicit 修饰构造函数的对象不可以从 int 到 B 的隐式转换
+ if (b1);  // OK：被 explicit 修饰转换函数 B::operator bool() 的对象可以从 B 到 bool 的按语境转换
+ bool b6(b1);  // OK：被 explicit 修饰转换函数 B::operator bool() 的对象可以从 B 到 bool 的按语境转换
+ bool b7 = b1;  // 错误：被 explicit 修饰转换函数 B::operator bool() 的对象不可以隐式转换
+ bool b8 = static_cast<bool>(b1);  // OK：static_cast 进行直接初始化
+
+ return 0;
+}
+```
+
+## 友元类和友元函数
+
+- 能访问私有成员
+- 破坏封装性
+- 友元关系不可传递
+- 友元关系的单向性
+- 友元声明的形式及数量不受限制
+
+## using
+
+### using 声明
+
+一条 using 声明 语句一次只引入命名空间的一个成员。它使得我们可以清楚知道程序中所引用的到底是哪个名字。
+
+```cpp
+using namespace_name::name;
+```
+
+### 构造函数的 using 声明
+
+在 C++11 中，派生类能够重用其直接基类定义的构造函数。
+
+```cpp
+class Derived : Base {
+public:
+    using Base::Base;
+    /* ... */
+};
+```
+
+如上 using 声明，对于基类的每个构造函数，编译器都生成一个与之对应（形参列表完全相同）的派生类构造函数。生成如下类型构造函数：
+
+```cpp
+derived(parms) : base(args) { }
+```
+
+### using 指示
+
+using 指示 使得某个特定命名空间中所有名字都可见，这样我们就无需再为它们添加任何前缀限定符了。如：
+
+```cpp
+using namespace_name name;
+```
+
+### 尽量少使用 using 指示 污染命名空间
+
+一般说来，使用 using 命令比使用 using 编译命令更安全，这是由于它只导入了指定的名称。如果该名称与局部名称发生冲突，编译器将发出指示。using编译命令导入所有的名称，包括可能并不需要的名称。如果与局部名称发生冲突，则局部名称将覆盖名称空间版本，而编译器并不会发出警告。另外，名称空间的开放性意味着名称空间的名称可能分散在多个地方，这使得难以准确知道添加了哪些名称。
+
+## :: 范围解析运算符
+
+### 分类
+
+- 全局作用域符（::name）：用于类型名称（类、类成员、成员函数、变量等）前，表示作用域为全局命名空间
+- 类作用域符（class::name）：用于表示指定类型的作用域范围是具体某个类的
+- 命名空间作用域符（namespace::name）:用于表示指定类型的作用域范围是具体某个命名空间的
+  
+```cpp
+int count = 0;        // 全局（::）的 count
+
+class A {
+public:
+    static int count; // 类 A 的 count（A::count）
+};
+
+int main() {
+    ::count = 1;      // 设置全局的 count 的值为 1
+
+    A::count = 2;     // 设置类 A 的 count 为 2
+
+    int count = 0;    // 局部的 count
+    count = 3;        // 设置局部的 count 的值为 3
+
+    return 0;
+}
+```
+
+## enum 枚举类型
+
+### 限定作用域的枚举类型
+
+```cpp
+enum class open_modes { input, output, append };
+```
+
+### 不限定作用域的枚举类型
+
+```cpp
+enum color { red, yellow, green };
+enum { floatPrec = 6, doublePrec = 10 };
+```
+
+## decltype
+
+decltype 关键字用于检查实体的声明类型或表达式的类型及值分类。语法：
+
+```cpp
+decltype ( expression )
+```
+
+```cpp
+// 尾置返回允许我们在参数列表之后声明返回类型
+template <typename It>
+auto fcn(It beg, It end) -> decltype(*beg)
+{
+    // 处理序列
+    return *beg;    // 返回序列中一个元素的引用
+}
+// 为了使用模板参数成员，必须用 typename
+template <typename It>
+auto fcn2(It beg, It end) -> typename remove_reference<decltype(*beg)>::type
+{
+    // 处理序列
+    return *beg;    // 返回序列中一个元素的拷贝
+}
+```
+
+## 成员初始化列表
+
+好处
+
+更高效：少了一次调用默认构造函数的过程。
+有些场合必须要用初始化列表：
+
+- 常量成员，因为常量只能初始化不能赋值，所以必须放在初始化列表里面
+- 引用类型，引用必须在定义的时候初始化，并且不能重新赋值，所以也要写在初始化列表里面
+- 没有默认构造函数的类类型，因为使用初始化列表可以不必调用默认构造函数来初始化，而是直接调用拷贝构造函数初始化。
+
+### 拷贝构造函数
+
+拷贝构造函数是一种特殊的构造函数，它在创建对象时，是使用同一类中之前创建的对象来初始化新创建的对象。拷贝构造函数通常用于：
+通过使用另一个同类型的对象来初始化新创建的对象。
+复制对象把它作为参数传递给函数。
+复制对象，并从函数返回这个对象。
+如果在类中没有定义拷贝构造函数，编译器会自行定义一个。如果类带有指针变量，并有动态内存分配，则它必须有一个拷贝构造函数。拷贝构造函数的最常见形式如下：
+
+```cpp
+classname (const classname &obj) {
+   // 构造函数的主体
+}
+```
+
+#### 例子
+
+```cpp
+class Line
+{
+   public:
+      int getLength( void );
+      Line( int len );             // 简单的构造函数
+      Line( const Line &obj);      // 拷贝构造函数
+      ~Line();                     // 析构函数
+ 
+   private:
+      int *ptr;
+};
+```
+
+## nitializer_list 列表初始化
+
+用花括号初始化器列表初始化一个对象，其中对应构造函数接受一个 std::initializer_list 参数
+
+```cpp
+#include <iostream>
+#include <vector>
+#include <initializer_list>
+ 
+template <class T>
+struct S {
+    std::vector<T> v;
+    S(std::initializer_list<T> l) : v(l) {
+         std::cout << "constructed with a " << l.size() << "-element list\n";
+    }
+    void append(std::initializer_list<T> l) {
+        v.insert(v.end(), l.begin(), l.end());
+    }
+    std::pair<const T*, std::size_t> c_arr() const {
+        return {&v[0], v.size()};  // 在 return 语句中复制列表初始化
+                                   // 这不使用 std::initializer_list
+    }
+};
+ 
+template <typename T>
+void templated_fn(T) {}
+ 
+int main()
+{
+    S<int> s = {1, 2, 3, 4, 5}; // 复制初始化
+    s.append({6, 7, 8});      // 函数调用中的列表初始化
+ 
+    std::cout << "The vector size is now " << s.c_arr().second << " ints:\n";
+ 
+    for (auto n : s.v)
+        std::cout << n << ' ';
+    std::cout << '\n';
+ 
+    std::cout << "Range-for over brace-init-list: \n";
+ 
+    for (int x : {-1, -2, -3}) // auto 的规则令此带范围 for 工作
+        std::cout << x << ' ';
+    std::cout << '\n';
+ 
+    auto al = {10, 11, 12};   // auto 的特殊规则
+ 
+    std::cout << "The list bound to auto has size() = " << al.size() << '\n';
+ 
+//    templated_fn({1, 2, 3}); // 编译错误！“ {1, 2, 3} ”不是表达式，
+                             // 它无类型，故 T 无法推导
+    templated_fn<std::initializer_list<int>>({1, 2, 3}); // OK
+    templated_fn<std::vector<int>>({1, 2, 3});           // 也 OK
+}
+```
+
+## 面向对象
+
+### 三大特征
+
+封装 继承 多态
+
+### 封装
+
+把客观事物封装成抽象的类，并且类可以把自己的数据和方法只让可信的类或者对象操作，对不可信的进行信息隐藏。关键字：public, protected, private。不写默认为 private。
+
+- public 成员：可以被任意实体访问
+- protected 成员：只允许被子类及本类的成员函数访问
+- private 成员：只允许被本类的成员函数访问
+
+## 继承
+
+基类（父类）——> 派生类（子类）
+
+## 多态
+
+多态，即多种状态（形态）。简单来说，我们可以将多态定义为消息以多种形式显示的能力。
+多态是以封装和继承为基础的。
+C++ 多态分类及实现：
+
+- 重载多态（Ad-hoc Polymorphism，编译期）：函数重载、运算符重载
+- 子类型多态（Subtype Polymorphism，运行期）：虚函数
+- 参数多态性（Parametric Polymorphism，编译期）：类模板、函数模板
+- 强制多态（Coercion Polymorphism，编译期/运行期）：基本类型转换、自定义类型转换
+
+### 静态多态（编译期/早绑定）
+
+#### 函数重载
+
+```cpp
+class A
+{
+public:
+    void do(int a);
+    void do(int a, int b);
+};
+```
+
+### 动态多态（运行期期/晚绑定）
+
+虚函数：用 virtual 修饰成员函数，使其成为虚函数(类似抽象函数)
+
+- 普通函数（非类成员函数）不能是虚函数
+- 静态函数（static）不能是虚函数
+- 构造函数不能是虚函数（因为在调用构造函数时，虚表指针并没有在对象的内存空间中，必须要构造函数调用完成后才会形成虚表指针）
+- 内联函数不能是表现多态性时的虚函数，解释见：虚函数（virtual）可以是内联函数（inline）吗？
+
