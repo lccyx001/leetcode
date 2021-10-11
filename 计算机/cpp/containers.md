@@ -21,7 +21,7 @@ for (auto it = m.cbegin(); it != m.cend(); ++it) {
 
 // vector 
 // find
-bool f = *find(vec.begin(),vec.end().target)==target;
+bool f = *find(vec.begin(),vec.end(),target)==target;
 
 // count
 

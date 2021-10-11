@@ -1,46 +1,56 @@
 #include <vector>
 #include <string>
+#include <iostream>
 using namespace std;
 
-vector<vector<string>> allstrs;
+vector<vector<string>> answers;
 vector<string> ans;
 bool ispal(string s)
 {
-    int n = s.size();
-    if (n == 0 || n == 1)
+    if (s.size() == 0 || s.size() == 1)
         return true;
-
-    for (int i = 0, j = n - 1; i < j; i++, j--)
-    {
-        if (s[i] != s[j])
-            return false;
-    }
-    return true;
+    return ispal(s.substr(1, s.size() - 2)) && s[0] == s[s.size() - 1];
 }
 
-void dfs(string s, int n)
+void dfs(string s, int pos)
 {
-    if (n == s.size())
+    if (pos == s.size())
     {
-        allstrs.push_back(ans);
+        vector<string> tmp;
+        for (auto &a : ans)
+            tmp.push_back(a);
+        answers.push_back(tmp);
         return;
     }
-
-    for (int i = n + 1; i < s.size(); i++)
+    for (int i = pos + 1; i <= s.size(); i++)
     {
+        if (ispal(s.substr(pos, i - pos)))
+        {
+            ans.push_back(s.substr(pos, i - pos));
+            dfs(s, i);
+            ans.pop_back();
+        }
     }
 }
 
 vector<vector<string>> partition(string s)
 {
-    int n = s.size();
-    vector<vector<int>> f(n, vector<int>(n, true));
-    for (int i = n - 1; i > 0; i--)
+    dfs(s, 0);
+    return answers;
+}
+int main()
+{
+    string a = "aab";
+    vector<vector<string>> b = partition(a);
+    for (auto &&i : b)
     {
-        for (int j = i; j < n; j++)
+        cout << i.size() << "  ";
+        for (auto &s : i)
         {
-            f[i][j] = (s[i] == s[j]) && f[i + 1][j - 1];
+            cout << s << "   ";
         }
+        cout << endl;
     }
-    
+
+    cout << b.size();
 }

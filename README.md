@@ -49,3 +49,16 @@ redis
 ## [Cpp 学习路线](https://www.nowcoder.com/discuss/595901)
 
 ## [Cpp项目](https://www.nowcoder.com/discuss/596700)
+
+1代表正确 2代表错误
+
+（4）BC A A BCD ABC AD ABCD A
+（5）B D C B B ABC ACD AB BCD ABCD 2 2 1 1 1
+（6）C C C A B ABD ACD ABC AC ABD 1 1 2 2
+（7）A D B D C ABCD ABCD BD ABCD 1 1 1 ABCD
+（8）A C B A ABC CD 全体员工 工厂主门 公众 安全发展 生命至上 安全第一
+（9）C D C C B AD ACD ABCD BCD ABCD 2 1 2 1 2 2
+（10）C B A C B BC ABCD ABCD ABCD ABCD 1 2 1 2 1
+（11）A 1 1 1 1 ABCD ABCD ABCD ABCDE AB ABCD
+（12）A A B C D BD ABCD ACD BCD ABCD 2 2 2 2 2
+（13）B D A B D D ABCD ABD ABCD BC 1 2 2
