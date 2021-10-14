@@ -3,24 +3,24 @@
 #include <algorithm>
 using namespace std;
 
-int maximalSquare(vector<vector<char>> &matrix)
+int countSquares(vector<vector<char>> &matrix)
 {
-    int l = matrix.size(), w = matrix[0].size(), maxSquare = 0;
+    int l = matrix.size(), w = matrix[0].size(), squares = 0;
     vector<vector<int>> dp(l, vector<int>(w, 0));
     for (int i = 0; i < l; i++)
     {
         for (int j = 0; j < w; j++)
         {
             if (i == 0 || j == 0)
-                dp[i][j] = matrix[i][j] == '1' ? 1 : 0;
-            else if (matrix[i][j] == '1')
+                dp[i][j] = matrix[i][j];
+            else if (matrix[i][j] == 1)
                 dp[i][j] = min(min(dp[i - 1][j], dp[i][j - 1]), dp[i - 1][j - 1]) + 1;
             else
                 dp[i][j] = 0;
-            maxSquare = max(maxSquare, dp[i][j]);
+            squares += dp[i][j];
         }
     }
-    return maxSquare * maxSquare;
+    return squares;
 }
 
 int main()
@@ -34,6 +34,6 @@ int main()
     a.push_back(a2);
     a.push_back(a3);
     a.push_back(a4);
-    auto x = maximalSquare(a);
+    auto x = countSquares(a);
     cout << x << endl;
 }
