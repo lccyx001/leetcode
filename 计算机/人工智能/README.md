@@ -2,7 +2,7 @@
 
 ## [智能Agent](./agent.md)
 
-## 通过搜索进行问题求解
+## [通过搜索进行问题求解](./solveProblemsBySearching.md)
 
 ## 超越经典搜索
 
