@@ -26,3 +26,12 @@
 - 为避免跨编译单元初始化次序问题，以 __local static__ 对象替换 __non-local static__ 对象（单例模式*）
 
 ## 了解 C++ 默默编写并调用哪些函数（编译器暗自为 class 创建 default 构造函数、copy 构造函数、copy assignment 操作符、析构函数）
+
+- copy  将来源对象的每一个non-static成员变量拷贝到目标对象
+- copy assignment cpp不会自动生成内含reference成员的类的赋值操作 __operator=__,如果基类的修饰符是private，则不会为派生类生成代码
+- deconstructor  给编译器一个地方，放置默认代码且编译器产出的析构函数是non-virtual的
+- constructor
+
+## 若不想使用编译器自动生成的函数，就应该明确拒绝（将不想使用的成员函数声明为 private，并且不予实现）
+
+- 将不想使用的成员函数声明为 private，并且不予实现，或者使用像Uncopyable这样的基类也可以
