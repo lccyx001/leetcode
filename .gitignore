@@ -15,8 +15,10 @@ dist
 # *.sql
 *.log
 pid
-job.md
 vue.config.js
 local_profile
 *.yaml
 *.out
+
+# Specific files
+jobs.md
