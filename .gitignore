@@ -22,3 +22,7 @@ local_profile
 
 # Specific files
 jobs.md
+
+; git rm -r --cached .
+; git add .
+; git commit -m "comment"
