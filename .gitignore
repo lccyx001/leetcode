@@ -1,5 +1,7 @@
 # Byte-compiled / optimized / DLL files
 __pycache__/
+计算机/
+数学/
 .vscode/
 *.py[cod]
 *$py.class
