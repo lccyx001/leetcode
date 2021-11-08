@@ -24,6 +24,8 @@ local_profile
 
 # Specific files
 jobs.md
+leetcoderank.md
+
 
 ; git rm -r --cached .
 ; git add .
