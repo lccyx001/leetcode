@@ -20,7 +20,6 @@ int threeSumClosest(vector<int>& nums, int target) {
         return tmp;
     }
   }
-
   return ans;
 }
 
