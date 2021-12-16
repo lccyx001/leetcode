@@ -1,3 +1,6 @@
+#include <math.h>
+#include <stack>
+#include <queue>
 #include <algorithm>
 #include <iostream>
 #include <map>
@@ -6,4 +9,10 @@
 #include <string>
 #include <unordered_map>
 #include <vector>
-#include <math.h>
+
+struct TreeNode {
+  int val;
+  TreeNode *left;
+  TreeNode *right;
+  TreeNode(int x) : val(x), left(NULL), right(NULL) {}
+};
