@@ -1,42 +1,57 @@
 #include "common.hh"
 using namespace std;
-bool check_valid(vector<string> vs) {
-  for (auto s : vs) {
-    if (s.size() > 3 && s.size() < 1) return false;
-    if (s.size() > 1 && stoi(s) < 10) return false;
-    if (stoi(s) > 255) return false;
-  }
-  return true;
-}
+class Solution {
+ private:
+  static constexpr int SEG_COUNT = 4;
 
-void dfs(string s, vector<string>& ans, vector<string>& vs, int idx) {
-  if (s.size() - 1 - idx > 3 * (4 - vs.size())) return;
-  if (vs.size() == 4 && check_valid(vs)) {
-    string p = "";
-    for (auto& ip : vs) {
-      p += ip + ".";
+ private:
+  vector<string> ans;
+  vector<int> segments;
+
+ public:
+  void dfs(const string& s, int segId, int segStart) {
+    // 如果找到了 4 段 IP 地址并且遍历完了字符串，那么就是一种答案
+    if (segId == SEG_COUNT) {
+      if (segStart == s.size()) {
+        string ipAddr;
+        for (int i = 0; i < SEG_COUNT; ++i) {
+          ipAddr += to_string(segments[i]);
+          if (i != SEG_COUNT - 1) {
+            ipAddr += ".";
+          }
+        }
+        ans.push_back(move(ipAddr));
+      }
+      return;
     }
-    p.pop_back();
-    ans.push_back(p);
-    return;
-  }
-  for (int i = idx + 1; i < s.size(); i++) {
-    if (vs.size() == 3) {
-      vs.push_back(s.substr(idx, s.size() - 1 - idx));
-      dfs(s, ans, vs, s.size() - 1);
-      vs.pop_back();
-    } else {
-      vs.push_back(s.substr(idx, i - idx));
-      dfs(s, ans, vs, i);
-      vs.pop_back();
+
+    // 如果还没有找到 4 段 IP 地址就已经遍历完了字符串，那么提前回溯
+    if (segStart == s.size()) {
+      return;
+    }
+
+    // 由于不能有前导零，如果当前数字为 0，那么这一段 IP 地址只能为 0
+    if (s[segStart] == '0') {
+      segments[segId] = 0;
+      dfs(s, segId + 1, segStart + 1);
+    }
+
+    // 一般情况，枚举每一种可能性并递归
+    int addr = 0;
+    for (int segEnd = segStart; segEnd < s.size(); ++segEnd) {
+      addr = addr * 10 + (s[segEnd] - '0');
+      if (addr > 0 && addr <= 0xFF) {
+        segments[segId] = addr;
+        dfs(s, segId + 1, segEnd + 1);
+      } else {
+        break;
+      }
     }
   }
-}
 
-vector<string> restoreIpAddresses(string s) {
-  vector<string> ans, vs;
-  dfs(s, ans, vs, 0);
-  return ans;
-}
-
-int main() {}
+  vector<string> restoreIpAddresses(string s) {
+    segments.resize(SEG_COUNT);
+    dfs(s, 0, 0);
+    return ans;
+  }
+};
