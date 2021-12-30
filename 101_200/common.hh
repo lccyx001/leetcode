@@ -32,3 +32,11 @@ class Node {
   Node(int _val, Node* _left, Node* _right, Node* _next)
       : val(_val), left(_left), right(_right), next(_next) {}
 };
+
+struct ListNode {
+  int val;
+  ListNode* next;
+  ListNode() : val(0), next(nullptr) {}
+  ListNode(int x) : val(x), next(nullptr) {}
+  ListNode(int x, ListNode* next) : val(x), next(next) {}
+};
